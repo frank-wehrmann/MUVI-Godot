@@ -1,2 +1,51 @@
-<title>MUVI-Godot — Project Timeline</title>
-<h1>MUVI-Godot — Development Roadmap</h1>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>MUVI-Godot — Gantt Chart</title>
+  <link rel="stylesheet" href="https://unpkg.com/frappe-gantt/dist/frappe-gantt.css">
+  <style>
+    body{font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;margin:0}
+    header,.toolbar,#gantt,.note{max-width:1100px;margin:1rem auto;padding:0 1rem}
+    h1{font-size:1.25rem;margin:1rem 0}
+    button{padding:.5rem .75rem;border:1px solid #ddd;border-radius:.5rem;background:#fff;cursor:pointer}
+    button:hover{background:#f6f6f6}
+    svg{width:100%;height:auto}
+  </style>
+</head>
+<body>
+  <header><h1>MUVI-Godot — Project Timeline</h1></header>
+  <div class="toolbar">
+    <button data-view="Day">Day</button>
+    <button data-view="Week">Week</button>
+    <button data-view="Month">Month</button>
+  </div>
+  <div id="gantt"></div>
+  <div class="note">Read-only visualization. Update <code>docs/data.json</code> and commit to change tasks.</div>
+
+  <script src="https://unpkg.com/frappe-gantt/dist/frappe-gantt.min.js"></script>
+  <script>
+    (async () => {
+      const tasks = await fetch('data.json').then(r => r.json());
+      const el = document.getElementById('gantt');
+      const gantt = new Gantt(el, tasks, {
+        view_mode: 'Week',
+        date_format: 'YYYY-MM-DD',
+        bar_height: 24,
+        padding: 20,
+        custom_popup_html: t => `
+          <div style="padding:.5rem .75rem">
+            <strong>${t.name}</strong><br/>
+            ${t._start.format("DD.MM.YYYY")} – ${t._end.format("DD.MM.YYYY")}<br/>
+            Progress: ${t.progress||0}%
+          </div>`
+      });
+      document.querySelectorAll('[data-view]').forEach(b =>
+        b.addEventListener('click', () => gantt.change_view_mode(b.dataset.view)));
+      const s=document.createElement('style'); s.textContent='.bar.milestone{fill:#111!important;stroke:#111!important}';
+      document.head.appendChild(s);
+    })();
+  </script>
+</body>
+</html>
