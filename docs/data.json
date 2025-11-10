@@ -1,0 +1,6 @@
+[
+  { "id":"m1","name":"Kickoff","start":"2025-11-10","end":"2025-11-10","progress":100,"custom_class":"milestone" },
+  { "id":"t1","name":"Concept","start":"2025-11-11","end":"2025-11-15","progress":60,"dependencies":"m1" },
+  { "id":"t2","name":"Prototype","start":"2025-11-17","end":"2025-11-28","progress":20,"dependencies":"t1" },
+  { "id":"m2","name":"Review","start":"2025-11-28","end":"2025-11-28","progress":0,"dependencies":"t2","custom_class":"milestone" }
+]
